@@ -29,6 +29,17 @@ const Home: NextPage = () => {
               with high yield
             </code>
           </p>
+          <p className="text-center text-lg">
+            In today ever-evolving financial landscape, stablecoins have emerged as a beacon of stability, offering a
+            <br />
+            harmonious blend of the conventional monetary world and the new age of decentralized finance. Enter Nest, a
+            <br />
+            cutting-edge decentralized application tailored for all your stablecoin needs. Nest is not just another
+            <br />
+            DApp; itis a sanctuary for stablecoin enthusiasts, traders, and users who prioritize stability and security
+            <br />
+            in a volatile crypto market.
+          </p>
         </div>
 
         <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
@@ -36,31 +47,37 @@ const Home: NextPage = () => {
             <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
               <BugAntIcon className="h-8 w-8 fill-secondary" />
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita, molestias!{" "}
                 <Link href="/debug" passHref className="link">
-                  Here Section 1 Contract
+                  Diverse Range of Stablecoins:
+                  <br />
                 </Link>{" "}
-                tab.
+                Whether you are looking to transact with the NUSD, the stable representation of the US dollar, or the
+                NJPY, mirroring the value of the Japanese yen, Nest offers a comprehensive suite of stablecoins,
+                ensuring that you are never limited by choice.
               </p>
             </div>
             <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
               <SparklesIcon className="h-8 w-8 fill-secondary" />
               <p>
-                Lorem, ipsum dolor.{" "}
                 <Link href="/example-ui" passHref className="link">
-                  Lorem, ipsum.
+                  Seamless Trade:
+                  <br />
                 </Link>{" "}
-                Lorem, ipsum dolor.
+                At the heart of Nest is a user-friendly interface that facilitates smooth trading experiences. Whether
+                you are a seasoned trader or just getting started, Nest makes stablecoin exchanges seamless and
+                hassle-free.
               </p>
             </div>
             <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
               <MagnifyingGlassIcon className="h-8 w-8 fill-secondary" />
               <p>
-                Lorem ipsum dolor sit amet consectetur.{" "}
                 <Link href="/blockexplorer" passHref className="link">
-                  Lorem, ipsum dolor.
+                  Global Reach, Local Feel:
+                  <br />
                 </Link>{" "}
-                tab.
+                Global Reach, Local Feel: While Nest caters to a global audience, we recognize the importance of local
+                currencies. Our variety of stablecoins ensures that you can transact and trade in a currency that feels
+                closest to home.
               </p>
             </div>
           </div>
