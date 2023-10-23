@@ -34,7 +34,7 @@ export const Footer = () => {
           <div className="flex justify-center items-center gap-2 text-sm w-full">
             <div className="text-center">
               <a
-                href="https://github.com/NeelClaudel/Nest-Stablecoin-UI.git"
+                href="https://github.com/NeelClaudel/Stablecoin-UI.git"
                 target="_blank"
                 rel="noreferrer"
                 className="link"

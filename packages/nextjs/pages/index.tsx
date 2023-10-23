@@ -35,10 +35,25 @@ const Home: NextPage = () => {
             harmonious blend of the conventional monetary world and the new age of decentralized finance. Enter Nest, a
             <br />
             cutting-edge decentralized application tailored for all your stablecoin needs. Nest is not just another
+            Dapp,
             <br />
-            DApp; itis a sanctuary for stablecoin enthusiasts, traders, and users who prioritize stability and security
+            it is a sanctuary for stablecoin enthusiasts, traders, and users who prioritize stability and security
             <br />
             in a volatile crypto market.
+          </p>
+        </div>
+        <div className="flex flex-col sm:flex-row gap-4 mt-8">
+          <p className="text-center text-lg">
+            Why Choose Nest ? <br />
+            Stablecoins represent a bridge between the traditional fiat world and the burgeoning realm
+            <br />
+            of cryptocurrencies. Nest amplifies this by providing a platform that is not just about stability but also
+            <br />
+            about trust, security, and ease of use. In a world where the crypto landscape shifts daily, Nest stands as a
+            <br />
+            symbol of consistency, offering users a dependable platform for their stablecoin needs. Embrace the future
+            <br />
+            with Nest. Your stablecoin sanctuary.
           </p>
         </div>
 
