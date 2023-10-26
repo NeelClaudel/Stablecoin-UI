@@ -46,7 +46,7 @@ export const Header = () => {
         <NavLink href="/">Home</NavLink>
       </li>
       <li>
-        <NavLink href="/">
+        <NavLink href="/nestDashboard">
           <CurrencyDollarIcon className="h-4 w-4" />
           $NEST
         </NavLink>
