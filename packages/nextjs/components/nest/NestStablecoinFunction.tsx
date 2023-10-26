@@ -5,9 +5,15 @@ import { Address } from "../scaffold-eth";
 import { formatEther } from "viem";
 import { useAccount } from "wagmi";
 import { Balance } from "~~/components/scaffold-eth";
-import { useAccountBalance, useDeployedContractInfo, useScaffoldContractRead } from "~~/hooks/scaffold-eth";
+import {
+  useAccountBalance,
+  useDeployedContractInfo,
+  useScaffoldContractRead,
+  useScaffoldContractWrite,
+} from "~~/hooks/scaffold-eth";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const NestStablecoinFunction = ({ address }: { address?: string }) => {
   const { address: connectedAddress } = useAccount();
   const { data: NESTEngineContract } = useDeployedContractInfo("NESTEngine");
@@ -18,19 +24,16 @@ export const NestStablecoinFunction = ({ address }: { address?: string }) => {
   const configuredNetwork = getTargetNetwork();
 
   // Contract Read Actions
-  const {} = useScaffoldContractRead({
-    contractName: "NESTEngine",
-    functionName: "getCollateralTokenPriceFeed",
-    args: [address],
+  const { data: decimals } = useScaffoldContractRead({
+    contractName: "NestStableCoin",
+    functionName: "decimals",
     watch: true,
   });
-  /*
-  const { data: accountInformation } = useScaffoldContractRead({
-    contractName: "NESTEngine",
-    functionName: "getAccountInformation",
-    args: [address],
+
+  const { data: owner } = useScaffoldContractRead({
+    contractName: "NestStableCoin",
+    functionName: "owner",
   });
-  */
 
   const { data: yourBalance } = useScaffoldContractRead({
     contractName: "NestStableCoin",
@@ -38,11 +41,13 @@ export const NestStablecoinFunction = ({ address }: { address?: string }) => {
     args: [connectedAddress],
     watch: true,
   });
+
   const { data: symbol } = useScaffoldContractRead({
     contractName: "NestStableCoin",
     functionName: "symbol",
     watch: true,
   });
+
   const { data: nestTotalSupply } = useScaffoldContractRead({
     contractName: "NestStableCoin",
     functionName: "totalSupply",
@@ -54,22 +59,50 @@ export const NestStablecoinFunction = ({ address }: { address?: string }) => {
     functionName: "name",
     watch: true,
   });
-  /*
+
+  const { data: allowance } = useScaffoldContractRead({
+    contractName: "NestStableCoin",
+    functionName: "allowance",
+    args: [connectedAddress, NestStableCoinContact?.address],
+    watch: true,
+  });
+
   // Contract Write Actions
-  const { writeAsync: stakeETH } = useScaffoldContractWrite({
-    contractName: "NESTEngine",
-    functionName: "stake",
-    value: "0.5",
+  const { writeAsync: approve } = useScaffoldContractWrite({
+    contractName: "NestStableCoin",
+    functionName: "approve",
+    args: [NestStableCoinContact?.address, nestTotalSupply],
   });
-  const { writeAsync: execute } = useScaffoldContractWrite({
-    contractName: "NESTEngine",
-    functionName: "execute",
+  approve; // This line is added to fix the warning message
+
+  const { writeAsync: burn } = useScaffoldContractWrite({
+    contractName: "NestStableCoin",
+    functionName: "burn",
+    args: [nestTotalSupply],
   });
-  const { writeAsync: withdrawETH } = useScaffoldContractWrite({
-    contractName: "NESTEngine",
-    functionName: "withdraw",
+  burn;
+
+  const { writeAsync: decreaseAllowance } = useScaffoldContractWrite({
+    contractName: "NestStableCoin",
+    functionName: "decreaseAllowance",
+    args: [NestStableCoinContact?.address, nestTotalSupply],
   });
-*/
+  decreaseAllowance;
+
+  const { writeAsync: burnFrom } = useScaffoldContractWrite({
+    contractName: "NestStableCoin",
+    functionName: "burnFrom",
+    args: [NestStableCoinContact?.address || undefined, nestTotalSupply ? BigInt(nestTotalSupply) : undefined],
+  });
+  burnFrom;
+
+  const { writeAsync: mint } = useScaffoldContractWrite({
+    contractName: "NestStableCoin",
+    functionName: "mint",
+    args: [NestStableCoinContact?.address || undefined, nestTotalSupply ? BigInt(nestTotalSupply) : undefined],
+  });
+  mint;
+
   return (
     <>
       {/* User Infos */}
@@ -97,7 +130,12 @@ export const NestStablecoinFunction = ({ address }: { address?: string }) => {
       <div className="flex items-center flex-col flex-grow w-full px-4 gap-12">
         <div className="flex flex-col items-center w-1/2">
           <div className="flex items-center flex-col flex-grow pt-10">
-            ${symbol} Total Supply : <span>{nestTotalSupply ? formatEther(nestTotalSupply) : 0}</span>
+            ${symbol} Total Supply : <span>{nestTotalSupply ? formatEther(nestTotalSupply).toString() : "0"}</span>
+          </div>
+          <div className="flex items-center flex-col flex-grow pt-10">{decimals} Decimals</div>
+          <div className="flex items-center flex-col flex-grow pt-10">{owner} Owner of the contract</div>
+          <div className="flex items-center flex-col flex-grow pt-10">
+            {allowance ? allowance.toString() : "0"} Allowance
           </div>
         </div>
       </div>

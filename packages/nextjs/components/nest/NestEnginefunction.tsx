@@ -4,16 +4,22 @@
 //import humanizeDuration from "humanize-duration";
 //import { formatEther } from "viem";
 import { useAccount } from "wagmi";
-import { useAccountBalance, useDeployedContractInfo, useScaffoldContractRead } from "~~/hooks/scaffold-eth";
+import {
+  useAccountBalance,
+  useDeployedContractInfo,
+  useScaffoldContractRead,
+  useScaffoldContractWrite,
+} from "~~/hooks/scaffold-eth";
 
 //import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 export const NestEngineFunction = ({ address }: { address?: string }) => {
   const { address: connectedAddress } = useAccount();
   const { data: NESTEngineContract } = useDeployedContractInfo("NESTEngine");
-  const { data: NESTEngineContact } = useDeployedContractInfo("NESTEngine");
+
+  const { balance: WethBalance } = useAccountBalance("0xdd13E55209Fd76AfE204dBda4007C227904f0a81") ?? {};
+
   useAccountBalance(NESTEngineContract?.address);
-  useAccountBalance(NESTEngineContact?.address);
 
   // const configuredNetwork = getTargetNetwork();
 
@@ -54,6 +60,22 @@ export const NestEngineFunction = ({ address }: { address?: string }) => {
     watch: true,
   });
 
+  const { data: getHealthFactor } = useScaffoldContractRead({
+    contractName: "NESTEngine",
+    functionName: "getHealthFactor",
+    args: [connectedAddress],
+    watch: true,
+  });
+  getHealthFactor;
+
+  // Contract Read Actions
+  const { data: calculateHealthFactor } = useScaffoldContractRead({
+    contractName: "NESTEngine",
+    functionName: "calculateHealthFactor",
+    args: [undefined, undefined],
+    watch: true,
+  });
+
   const { data: getCollateralTokenPriceFeed } = useScaffoldContractRead({
     contractName: "NESTEngine",
     functionName: "getCollateralTokenPriceFeed",
@@ -68,13 +90,20 @@ export const NestEngineFunction = ({ address }: { address?: string }) => {
   });
 
   // Contract Write Actions
-  /*
+  const { writeAsync: depositCollateral } = useScaffoldContractWrite({
+    contractName: "NESTEngine",
+    functionName: "depositCollateral",
+    args: [NESTEngineContract?.address, undefined] as const,
+  });
+  depositCollateral;
+
   const { writeAsync: depositCollateralAndMintNest } = useScaffoldContractWrite({
     contractName: "NESTEngine",
     functionName: "depositCollateralAndMintNest",
-    args: [],
+    args: [NESTEngineContract?.address, undefined, undefined] as const,
   });
-*/
+  depositCollateralAndMintNest;
+
   return (
     <>
       <div className="flex items-center flex-col flex-grow w-full px-4 gap-12">
@@ -84,10 +113,16 @@ export const NestEngineFunction = ({ address }: { address?: string }) => {
             Collateral Price Feed {getCollateralTokenPriceFeed ? getCollateralTokenPriceFeed.toString() : ""}
           </div>
           <div className="flex items-center flex-col flex-grow pt-10">
-            Minimum Health Factor {getMinHealthFactor ? getMinHealthFactor.toString() : ""}
+            Collateral Price Feed {WethBalance ? WethBalance.toString() : ""}
           </div>
           <div className="flex items-center flex-col flex-grow pt-10">
             Minimum Health Factor {getMinHealthFactor ? getMinHealthFactor.toString() : ""}
+          </div>
+          <div className="flex items-center flex-col flex-grow pt-10">
+            Calculate Health Factor {calculateHealthFactor ? calculateHealthFactor.toString() : ""}
+          </div>{" "}
+          <div className="flex items-center flex-col flex-grow pt-10">
+            Get Health Factor {getHealthFactor ? getHealthFactor.toString() : ""}
           </div>
           <div className="flex items-center flex-col flex-grow pt-10">Get Nest {getNest ? getNest.toString() : ""}</div>
           <div className="flex items-center flex-col flex-grow pt-10">
