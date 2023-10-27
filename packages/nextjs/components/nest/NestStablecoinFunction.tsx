@@ -132,10 +132,15 @@ export const NestStablecoinFunction = ({ address }: { address?: string }) => {
           <div className="flex items-center flex-col flex-grow pt-10">
             ${symbol} Total Supply : <span>{nestTotalSupply ? formatEther(nestTotalSupply).toString() : "0"}</span>
           </div>
-          <div className="flex items-center flex-col flex-grow pt-10">{decimals} Decimals</div>
-          <div className="flex items-center flex-col flex-grow pt-10">{owner} Owner of the contract</div>
           <div className="flex items-center flex-col flex-grow pt-10">
-            {allowance ? allowance.toString() : "0"} Allowance
+            {" "}
+            Decimals<span>{decimals}</span>
+          </div>
+          <div className="flex items-center flex-col flex-grow pt-10">
+            Owner of the contract <span>{owner}</span>
+          </div>
+          <div className="flex items-center flex-col flex-grow pt-10">
+            Allowance <span>{allowance ? allowance.toString() : "0"}</span>
           </div>
         </div>
       </div>

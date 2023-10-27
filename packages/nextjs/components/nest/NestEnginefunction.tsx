@@ -3,7 +3,9 @@
 //import { Token } from "@uniswap/sdk-core";
 //import humanizeDuration from "humanize-duration";
 //import { formatEther } from "viem";
+import { useState } from "react";
 import { useAccount } from "wagmi";
+import { IntegerInput } from "~~/components/scaffold-eth";
 import {
   useAccountBalance,
   useDeployedContractInfo,
@@ -17,7 +19,9 @@ export const NestEngineFunction = ({ address }: { address?: string }) => {
   const { address: connectedAddress } = useAccount();
   const { data: NESTEngineContract } = useDeployedContractInfo("NESTEngine");
 
-  const { balance: WethBalance } = useAccountBalance("0xdd13E55209Fd76AfE204dBda4007C227904f0a81") ?? {};
+  const { balance: WethBalance } = useAccountBalance() ?? {};
+
+  const [txValue, setTxValue] = useState<string | bigint>("");
 
   useAccountBalance(NESTEngineContract?.address);
 
@@ -101,6 +105,11 @@ export const NestEngineFunction = ({ address }: { address?: string }) => {
     contractName: "NESTEngine",
     functionName: "depositCollateralAndMintNest",
     args: [NESTEngineContract?.address, undefined, undefined] as const,
+    value: BigInt(txValue),
+    blockConfirmations: 1,
+    onBlockConfirmation: txnRecipt => {
+      console.log("Transaction Blockhash", txnRecipt.blockHash);
+    },
   });
   depositCollateralAndMintNest;
 
@@ -108,38 +117,66 @@ export const NestEngineFunction = ({ address }: { address?: string }) => {
     <>
       <div className="flex items-center flex-col flex-grow w-full px-4 gap-12">
         <div className="flex flex-col items-center w-1/2">
-          <div className="flex items-center flex-col flex-grow pt-10">Your Connected Address {connectedAddress}</div>
           <div className="flex items-center flex-col flex-grow pt-10">
-            Collateral Price Feed {getCollateralTokenPriceFeed ? getCollateralTokenPriceFeed.toString() : ""}
+            Your Connected Address <span>{connectedAddress}</span>
           </div>
           <div className="flex items-center flex-col flex-grow pt-10">
-            Collateral Price Feed {WethBalance ? WethBalance.toString() : ""}
+            Collateral Price Feed{" "}
+            <span>{getCollateralTokenPriceFeed ? getCollateralTokenPriceFeed.toString() : ""}</span>
           </div>
           <div className="flex items-center flex-col flex-grow pt-10">
-            Minimum Health Factor {getMinHealthFactor ? getMinHealthFactor.toString() : ""}
+            Your WETH Balance <span>{WethBalance ? WethBalance.toString() : ""}</span>
           </div>
           <div className="flex items-center flex-col flex-grow pt-10">
-            Calculate Health Factor {calculateHealthFactor ? calculateHealthFactor.toString() : ""}
+            Minimum Health Factor <span>{getMinHealthFactor ? getMinHealthFactor.toString() : ""}</span>
+          </div>
+          <div className="flex items-center flex-col flex-grow pt-10">
+            Calculate Health Factor <span>{calculateHealthFactor ? calculateHealthFactor.toString() : ""}</span>
           </div>{" "}
           <div className="flex items-center flex-col flex-grow pt-10">
-            Get Health Factor {getHealthFactor ? getHealthFactor.toString() : ""}
-          </div>
-          <div className="flex items-center flex-col flex-grow pt-10">Get Nest {getNest ? getNest.toString() : ""}</div>
-          <div className="flex items-center flex-col flex-grow pt-10">
-            Get Precision : {getPrecision ? getPrecision.toString() : ""}
+            Get Health Factor <span>{getHealthFactor ? getHealthFactor.toString() : ""}</span>
           </div>
           <div className="flex items-center flex-col flex-grow pt-10">
-            Liquidation Precision : {getLiquidationPrecision ? getLiquidationPrecision.toString() : ""}
+            Get Nest <span>{getNest ? getNest.toString() : ""}</span>
           </div>
           <div className="flex items-center flex-col flex-grow pt-10">
-            Get Additional Feed Precision : {getAdditionalFeedPrecision ? getAdditionalFeedPrecision.toString() : ""}
+            Get Precision : <span>{getPrecision ? getPrecision.toString() : ""}</span>
           </div>
           <div className="flex items-center flex-col flex-grow pt-10">
-            Liquidation Bonus : {getLiquidationBonus ? getLiquidationBonus.toString() : ""}
+            Liquidation Precision : <span>{getLiquidationPrecision ? getLiquidationPrecision.toString() : ""}</span>
           </div>
           <div className="flex items-center flex-col flex-grow pt-10">
-            Get Liquidation Threshold : {getLiquidationThreshold ? getLiquidationThreshold.toString() : ""}
+            Get Additional Feed Precision :{" "}
+            <span>{getAdditionalFeedPrecision ? getAdditionalFeedPrecision.toString() : ""}</span>
           </div>
+          <div className="flex items-center flex-col flex-grow pt-10">
+            Liquidation Bonus : <span>{getLiquidationBonus ? getLiquidationBonus.toString() : ""}</span>
+          </div>
+          <div className="flex items-center flex-col flex-grow pt-10">
+            Get Liquidation Threshold : <span>{getLiquidationThreshold ? getLiquidationThreshold.toString() : ""}</span>
+          </div>
+          <div className="flex items-center flex-col flex-grow pt-10">
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => {
+                depositCollateral();
+              }}
+            >
+              Deposit Collateral
+            </button>
+            <button className="btn btn-error" onClick={() => depositCollateralAndMintNest()}>
+              Deposit Collateral And Mint Nest
+            </button>
+          </div>
+          <IntegerInput
+            value={txValue}
+            onChange={updatedTxValue => {
+              setTxValue(updatedTxValue);
+            }}
+            placeholder="value (wei)"
+            name="value"
+          />
+          ;
         </div>
       </div>
     </>
