@@ -2,8 +2,8 @@
 //import { ETHToPrice } from "./EthToPrice";
 //import { Token } from "@uniswap/sdk-core";
 //import humanizeDuration from "humanize-duration";
-//import { formatEther } from "viem";
 import { useState } from "react";
+//import { formatEther } from "viem";
 import { useAccount } from "wagmi";
 import { IntegerInput } from "~~/components/scaffold-eth";
 import {
