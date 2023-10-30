@@ -18,6 +18,7 @@ export const NestStablecoinFunction = ({ address }: { address?: string }) => {
   const { address: connectedAddress } = useAccount();
   const { data: NESTEngineContract } = useDeployedContractInfo("NESTEngine");
   const { data: NestStableCoinContact } = useDeployedContractInfo("NestStableCoin");
+
   useAccountBalance(NESTEngineContract?.address);
   useAccountBalance(NestStableCoinContact?.address);
 
